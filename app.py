@@ -180,7 +180,7 @@ def page_admin():
 
     # Lightweight "admin pin" (not enterprise security)
     admin_pin = st.text_input("Admin PIN", type="password")
-    expected = "1234"
+    expected = st.secrets.get("ADMIN_PIN", "1234")
 
     if admin_pin != expected:
         st.warning("Enter the Admin PIN to continue.")
