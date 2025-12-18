@@ -94,4 +94,25 @@ def attempt_buzz(player_name: str) -> tuple[bool, str]:
 
         if winner_name:
             conn.commit()
-            return False, f"Too late — {winner_name} already buzzed fir_
+            return False, f"Too late - {winner_name} already buzzed first."
+
+        # Claim winner
+        cur.execute(
+            "UPDATE rounds SET winner_name = ?, winner_time_utc = ? WHERE id = ? AND winner_name IS NULL",
+            (player_name, buzz_time, round_id),
+        )
+
+        # Mark THIS log row as winner
+        cur.execute("UPDATE buzz_log SET was_winner = 1 WHERE id = ?", (log_id,))
+
+        conn.commit()
+        return True, "You buzzed in FIRST!"
+
+    except sqlite3.Error as e:
+        try:
+            conn.rollback()
+        except Exception:
+            pass
+        return False, f"Database error: {e}"
+    finally:
+        conn.close()
