@@ -1,0 +1,12 @@
+# Python / caches
+__pycache__/
+*.py[cod]
+
+# Local DB
+buzzer.db
+
+# Streamlit secrets (never commit)
+.streamlit/secrets.toml
+
+# OS files
+.DS_Store
